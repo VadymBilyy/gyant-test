@@ -1,26 +1,25 @@
+import { option } from 'fp-ts';
+import { constVoid } from 'fp-ts/lib/function';
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Header } from './components/header/header.component';
+import { Redirect, Route, Switch } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
+import { useAppStyles } from './App.styles';
+import { SignInPageContainer } from './pages/sign-in/sign-in.container';
+import { ReviewPageContainer } from './pages/review/review-page.container';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
-
-export default App;
+export const App = () => {
+	const classes = useAppStyles();
+	return (
+		<div className={classes.container}>
+			<Header fullName={option.some('Vadim')} onLogout={constVoid} />
+			<BrowserRouter>
+				<Switch>
+					<Route path={'/sign-in'} render={() => <SignInPageContainer />} />
+					<Route path={'/review'} render={() => <ReviewPageContainer />} />
+					<Redirect to={'/sign-in'} />
+				</Switch>
+			</BrowserRouter>
+		</div>
+	);
+};
