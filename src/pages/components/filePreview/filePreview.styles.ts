@@ -1,16 +1,15 @@
 import { makeStyles } from '@material-ui/styles';
-import { palette } from '../../config/palette';
+import { palette } from '../../../config/palette';
 
 export const useFilePreviewStyles = makeStyles({
-	container: {},
 	title: {
 		color: palette.titleColor,
 	},
-	root: {},
 });
 
 export const usePaperStyles = makeStyles({
 	root: {
+		maxHeight: 650,
 		padding: 20,
 		overflow: 'scroll',
 		lineHeight: '24px',

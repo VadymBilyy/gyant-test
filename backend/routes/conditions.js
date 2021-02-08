@@ -1,9 +1,9 @@
 const router = require('express').Router();
-let Reasons = require('../models/reasons.model');
+let Conditions = require('../models/conditions.model');
 
 router.route('/').get((req, res) => {
-	Reasons.find()
-		.then((reasons) => res.json(reasons))
+	Conditions.find()
+		.then((conditions) => res.json(conditions))
 		.catch((err) => res.status(400).json('Error: ' + err));
 });
 

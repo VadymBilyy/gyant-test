@@ -2,25 +2,6 @@ import { array, record } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/pipeable';
 import { SelectOption } from './select.model';
 
-type ConditionsJSON = Record<ConditionID, string>;
-
-export interface Case {
-	text: string;
-	id: number;
-}
-
-export interface ConditionReviewComplete {
-	caseId: number;
-	conditions: ConditionID[];
-}
-
-export const conditionsJSONtoSelectOptions = (conditions: ConditionsJSON): SelectOption<ConditionID>[] =>
-	pipe(
-		conditions,
-		record.toArray,
-		array.map(([value, label]) => ({ label, value })),
-	);
-
 export type ConditionID =
 	| 'ICD_10'
 	| 'A09'
@@ -106,3 +87,25 @@ export type ConditionID =
 	| 'S93419A'
 	| 'S93429A'
 	| 'S93439A';
+
+export type ConditionsJSON = Record<ConditionID, string>;
+export interface ConditionsResponseJSON {
+	_id: string;
+	conditions: ConditionsJSON;
+}
+export interface Case {
+	description: string;
+	caseId: string;
+}
+
+export interface ConditionReviewComplete {
+	caseId: string;
+	conditions: ConditionID[];
+}
+
+export const conditionsJSONtoSelectOptions = (conditions: ConditionsJSON): SelectOption<ConditionID>[] =>
+	pipe(
+		conditions,
+		record.toArray,
+		array.map(([value, label]) => ({ label, value })),
+	);

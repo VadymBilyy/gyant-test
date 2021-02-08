@@ -1,10 +1,10 @@
 import React, { FC, memo } from 'react';
-import { useFilePreviewStyles, usePaperStyles } from './conditionSelector.styles';
 import { List, ListItem, Paper } from '@material-ui/core';
-import { Effect } from '../../utils/function.utils';
-import { SelectOption } from '../../models/select.model';
-import { ConditionID } from '../../models/condition.model';
 import clsx from 'clsx';
+import { useFilePreviewStyles, usePaperStyles } from './conditionSelector.styles';
+import { ConditionID } from '../../../models/condition.model';
+import { SelectOption } from '../../../models/select.model';
+import { Effect } from '../../../utils/function.utils';
 
 interface ConditionSelectorProps {
 	conditions: SelectOption<ConditionID>[];
@@ -21,10 +21,8 @@ export const ConditionSelector: FC<ConditionSelectorProps> = memo(
 
 		const renderConditions = (conditions: SelectOption<ConditionID>[]) =>
 			conditions.map(({ value, label }) => {
-				const onItemClick = () => {
-					console.log('here');
-					onSelectCondition(value);
-				};
+				const onItemClick = () => onSelectCondition(value);
+
 				const isSelected = isItemSelected(value);
 
 				const listItemClassName = clsx(isSelected && classes.selectedListItem);

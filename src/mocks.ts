@@ -5,8 +5,8 @@ export const EHR_FIXTURE =
 
 export const CASES_FIXTURE: Case[] = [
 	{
-		text: EHR_FIXTURE,
-		id: 10,
+		description: EHR_FIXTURE,
+		caseId: '10',
 	},
 ];
 

@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/styles';
-import { palette } from '../../config/palette';
+import { palette, mobilePalette } from '../../../config/palette';
 
 export const useHeaderStyles = makeStyles({
 	container: {
@@ -19,6 +19,9 @@ export const useHeaderStyles = makeStyles({
 			'&:hover': {
 				background: 'none',
 			},
+		},
+		'@media (max-width: 410px)': {
+			borderColor: mobilePalette.headerBorderBottomColor,
 		},
 	},
 	userSection: {},

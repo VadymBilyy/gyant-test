@@ -1,14 +1,15 @@
-import { RemoteData, toOption } from '@devexperts/remote-data-ts';
-import { observable } from '@devexperts/rx-utils/dist/observable.utils';
-import { BehaviorSubject, Observable, OperatorFunction } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Effect } from './function.utils';
 
 export type PropertyAdapter<A> = [Effect<A>, Observable<A>];
-
-export const filterMapSuccessRD = <L, A>(): OperatorFunction<RemoteData<L, A>, A> =>
-	observable.filterMap<RemoteData<L, A>, A>(toOption);
+export type Adapter<A> = [Effect<A>, Observable<A>];
 
 export const createPropertyAdapter = <A>(initial: A): PropertyAdapter<A> => {
 	const bs = new BehaviorSubject(initial);
 	return [(a) => bs.getValue() !== a && bs.next(a), bs.asObservable()];
+};
+
+export const createAdapter = <A>(): Adapter<A> => {
+	const s = new Subject<A>();
+	return [(a: A) => s.next(a), s.asObservable()];
 };

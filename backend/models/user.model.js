@@ -17,6 +17,9 @@ const userSchema = new Schema(
 			trim: true,
 			minLength: 3,
 		},
+		fullName: {
+			type: String,
+		},
 	},
 	{
 		timestamps: true,

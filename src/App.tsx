@@ -1,19 +1,21 @@
-import { option } from 'fp-ts';
-import { constVoid } from 'fp-ts/lib/function';
-import React from 'react';
-import { Header } from './components/header/header.component';
 import { Redirect, Route, Switch } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
+import React from 'react';
+import { HeaderContainer } from './pages/components/header/header.container';
+import { ReviewPageContainer } from './pages/review-page/review-page.container';
 import { useAppStyles } from './App.styles';
-import { SignInPageContainer } from './pages/sign-in/sign-in.container';
-import { ReviewPageContainer } from './pages/review/review-page.container';
+import { SignInPageContainer } from './pages/sign-in-page/sign-in.container';
+import { createSessionViewModel } from './pages/sign-in-page/sign-in.view-model';
+
+export const sessionViewModel = createSessionViewModel();
 
 export const App = () => {
 	const classes = useAppStyles();
+
 	return (
 		<div className={classes.container}>
-			<Header fullName={option.some('Vadim')} onLogout={constVoid} />
 			<BrowserRouter>
+				<HeaderContainer />
 				<Switch>
 					<Route path={'/sign-in'} render={() => <SignInPageContainer />} />
 					<Route path={'/review'} render={() => <ReviewPageContainer />} />

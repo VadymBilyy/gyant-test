@@ -10,5 +10,9 @@ export const useButtonStyles = makeStyles({
 		'&:hover': {
 			background: palette.processButtonHoveredBackground,
 		},
+		'&.MuiButton-root.Mui-disabled': {
+			color: palette.defaultColor,
+			opacity: 0.5,
+		},
 	},
 });

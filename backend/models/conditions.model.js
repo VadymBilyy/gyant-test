@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const reasonsSchema = new Schema(
+const conditionSchema = new Schema(
 	{
-		reasons: {
+		conditions: {
 			type: Object,
 			required: true,
 		},
@@ -13,6 +13,6 @@ const reasonsSchema = new Schema(
 	},
 );
 
-const Reasons = mongoose.model('Reasons', reasonsSchema);
+const Conditions = mongoose.model('reasons', conditionSchema);
 
-module.exports = Reasons;
+module.exports = Conditions;

@@ -1,10 +1,21 @@
+const themeColor = '#0f4080';
 export const palette = {
-	headerBackgroundColor: '#0f4080',
+	headerBackgroundColor: themeColor,
 	headerBorderBottom: 'black',
 	defaultColor: 'white',
-	titleColor: '#0f4080',
-	selectedConditionBg: '#0f4080',
+	titleColor: themeColor,
+	selectedConditionBg: themeColor,
 	selectedConditionText: 'white',
-	processButtonBackground: '#0f4080',
-	processButtonHoveredBackground: 'rgba(15, 64, 128, 0.8)',
+	processButtonBackground: themeColor,
+	processButtonHoveredBackground: 'rgba(15, 64, 128, 0.3)',
+	errorBackgroundColor: '#F48FB1',
+	loaderIconColor: themeColor,
+	loginSignupButtonBackgroundColor: themeColor,
+};
+
+export const mobilePalette = {
+	defaultColor: 'white',
+	loginContainerBackground: 'rgba(15, 64, 128, 0.5)',
+	reviewContainerBackground: 'rgba(15, 64, 128, 0.5)',
+	headerBorderBottomColor: 'white',
 };

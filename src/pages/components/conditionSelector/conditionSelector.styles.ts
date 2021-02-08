@@ -1,9 +1,13 @@
 import { makeStyles } from '@material-ui/styles';
-import { palette } from '../../config/palette';
+import { palette } from '../../../config/palette';
 
 export const useFilePreviewStyles = makeStyles({
 	container: {
 		minWidth: 400,
+
+		'@media (max-width: 410px)': {
+			minWidth: 0,
+		},
 	},
 	title: {
 		color: palette.titleColor,
