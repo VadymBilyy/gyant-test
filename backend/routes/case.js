@@ -2,11 +2,8 @@ const router = require('express').Router();
 let Case = require('../models/case.model');
 
 router.route('/').get((req, res) => {
-	Case.find()
-		.then((cases) => {
-			const notProcessedCases = cases.filter((medCase) => !medCase.isResolved);
-			return res.json(notProcessedCases);
-		})
+	Case.find({ isResolved: false })
+		.then((cases) => res.json(cases))
 		.catch((err) => res.status(400).json('Error: ' + err));
 });
 
