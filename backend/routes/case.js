@@ -4,6 +4,7 @@ let Case = require('../models/case.model');
 router.route('/').get((req, res) => {
 	Case.find()
 		.then((cases) => {
+			// when can show only not processes cases, but for testing all cases are returned
 			// const notProcessedCases = cases.filter((medCase) => !medCase.isResolved);
 			return res.json(cases);
 		})
