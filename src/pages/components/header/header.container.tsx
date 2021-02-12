@@ -1,6 +1,6 @@
 import { withRX } from '@devexperts/react-kit/dist/utils/with-rx2';
 import { option } from 'fp-ts';
-import { sessionViewModel } from '../../../App';
+import { sessionViewModel } from '../../../app/App';
 import { Header } from './header.component';
 
 export const HeaderContainer = withRX(Header)(() => {

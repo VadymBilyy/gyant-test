@@ -1,5 +1,5 @@
 import { array, option } from 'fp-ts';
-import { constNull, constant } from 'fp-ts/lib/function';
+import { constNull, constant, Lazy } from 'fp-ts/lib/function';
 import { pipe } from 'fp-ts/lib/pipeable';
 import React, { Fragment, memo, useEffect, useState } from 'react';
 
@@ -13,7 +13,8 @@ import { FilePreview } from '../components/filePreview/filePreview.component';
 import { useReviewStyles } from './review-page.styles';
 
 interface ReviewPageProps {
-	onCaseProcess: Effect<ConditionReviewComplete>;
+	onProcessCase: Effect<ConditionReviewComplete>;
+	onRefreshCases: Lazy<void>;
 	isProcessing: boolean;
 	isCasesListEmpty: boolean;
 	isDataLoading: boolean;
@@ -25,7 +26,8 @@ interface ReviewPageProps {
 
 export const ReviewPage = memo<ReviewPageProps>(
 	({
-		onCaseProcess,
+		onProcessCase,
+		onRefreshCases,
 		availableConditions,
 		currentCase,
 		isProcessing,
@@ -58,7 +60,7 @@ export const ReviewPage = memo<ReviewPageProps>(
 				option.map((currentCase) => currentCase.caseId),
 				option.getOrElse(constant('')),
 			);
-			onCaseProcess({ caseId, conditions: selectedConditions });
+			onProcessCase({ caseId, conditions: selectedConditions });
 		};
 
 		const renderError = (error: option.Option<string>) =>
@@ -95,9 +97,15 @@ export const ReviewPage = memo<ReviewPageProps>(
 			return isDataLoading ? (
 				<EmptyState state={'LOADING'} />
 			) : isCasesListEmpty ? (
-				<EmptyState state={'NO_CASES'} />
+				<EmptyState onRefresh={onRefreshCases} state={'NO_CASES'} />
 			) : (
-				pipe(currentCase, option.fold(constant(<EmptyState state={'ALL_PROCESSED'} />), renderCase))
+				pipe(
+					currentCase,
+					option.fold(
+						constant(<EmptyState onRefresh={onRefreshCases} state={'ALL_PROCESSED'} />),
+						renderCase,
+					),
+				)
 			);
 		};
 

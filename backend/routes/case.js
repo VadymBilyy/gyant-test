@@ -4,25 +4,31 @@ let Case = require('../models/case.model');
 router.route('/').get((req, res) => {
 	Case.find()
 		.then((cases) => {
-			// when can show only not processes cases, but for testing all cases are returned
-			// const notProcessedCases = cases.filter((medCase) => !medCase.isResolved);
-			return res.json(cases);
+			const notProcessedCases = cases.filter((medCase) => !medCase.isResolved);
+			return res.json(notProcessedCases);
 		})
 		.catch((err) => res.status(400).json('Error: ' + err));
 });
 
-router.route('/update/:id').post((req, res) => {
-	Case.findById(req.params.id)
-		.then((processedCase) => {
-			processedCase.isResolved = processedCase.isResolved;
-			processedCase.conditions = req.body.conditions;
-			processedCase.description = processedCase.description;
+router.route('/refresh/').post((req, res) => {
+	Case.updateMany({
+		$set: {
+			conditions: [],
+			isResolved: false,
+		},
+	})
+		.then(() => res.status(200).json())
+		.catch((err) => res.status(400).json('Error ' + err));
+});
 
-			processedCase
-				.save()
-				.then((processedCase) => res.json(processedCase))
-				.catch((err) => res.status(400).json('Error: ' + err));
-		})
+router.route('/update/:id').post((req, res) => {
+	Case.findByIdAndUpdate(req.params.id, {
+		$set: {
+			isResolved: true,
+			conditions: req.body.conditions,
+		},
+	})
+		.then(() => res.status(200).json())
 		.catch((err) => res.status(400).json('Error: ' + err));
 });
 

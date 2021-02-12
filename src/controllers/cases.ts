@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 
 interface CasesController {
 	getCases: Lazy<Observable<RD<CaseJSON[]>>>;
+	refreshCases: Lazy<Observable<RD<void>>>;
 	getConditions: Lazy<Observable<RD<ConditionsResponseJSON[]>>>;
 	processCase: FunctionN<[string, ConditionID[]], Observable<RD<void>>>;
 }
@@ -22,4 +23,6 @@ export const casesController: CasesController = {
 			...REQUEST_CONFIG_WITH_CREDENTIALS,
 			body: { conditions },
 		}).pipe(map(toRemoteData)),
+	refreshCases: () =>
+		RxHR.post(`${DEFAULT_API_URI}/api/cases/refresh/`, REQUEST_CONFIG_WITH_CREDENTIALS).pipe(map(toRemoteData)),
 };

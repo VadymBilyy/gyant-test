@@ -13,7 +13,12 @@ app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(express.json());
 
 const uri = process.env.ATLAS_URI;
-mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+mongoose.connect(uri, {
+	useNewUrlParser: true,
+	useCreateIndex: true,
+	useUnifiedTopology: true,
+	useFindAndModify: true,
+});
 
 const connection = mongoose.connection;
 
@@ -27,9 +32,8 @@ const conditionsRouter = require('./routes/conditions');
 
 app.use(cookieParser());
 
-app.use('/api', checkToken);
-
 app.use('/user', userRouter);
+app.use('/api', checkToken);
 app.use('/api/cases', casesRouter);
 app.use('/api/conditions', conditionsRouter);
 

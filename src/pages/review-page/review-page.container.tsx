@@ -14,13 +14,15 @@ export const ReviewPageContainer = withRX(ReviewPage)(() => {
 		isProcessing$,
 		isDataLoading$,
 		processCaseError$,
-		onCaseProcess,
+		onProcessCase,
+		onRefreshCases,
 		isDataError$,
 	} = reviewPageViewModel;
 
 	return {
 		defaultProps: {
-			onCaseProcess,
+			onProcessCase,
+			onRefreshCases,
 			isProcessing: false,
 			isCasesListEmpty: true,
 			isDataLoading: true,

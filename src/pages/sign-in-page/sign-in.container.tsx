@@ -1,6 +1,6 @@
 import { withRX } from '@devexperts/react-kit/dist/utils/with-rx2';
 import { option } from 'fp-ts';
-import { sessionViewModel } from '../../App';
+import { sessionViewModel } from '../../app/App';
 import { SignInPage } from './sign-in.component';
 
 export const SignInPageContainer = withRX(SignInPage)(() => {

@@ -25,4 +25,10 @@ export const useEmptyStateStyles = makeStyles({
 	emptyStateTitle: {
 		marginLeft: 5,
 	},
+	withCallback: {
+		flexDirection: 'column',
+		'& > button': {
+			marginTop: 20,
+		},
+	},
 });

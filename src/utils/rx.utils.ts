@@ -1,4 +1,5 @@
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, MonoTypeOperatorFunction, Observable, Subject } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 import { Effect } from './function.utils';
 
 export type PropertyAdapter<A> = [Effect<A>, Observable<A>];
@@ -13,3 +14,5 @@ export const createAdapter = <A>(): Adapter<A> => {
 	const s = new Subject<A>();
 	return [(a: A) => s.next(a), s.asObservable()];
 };
+
+export const hold = <T>(): MonoTypeOperatorFunction<T> => shareReplay<T>({ refCount: true, bufferSize: 1 });

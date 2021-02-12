@@ -1,8 +1,8 @@
 import { array, option } from 'fp-ts';
-import { combineLatest, Observable } from 'rxjs';
-import { filter, map, mapTo, pluck, shareReplay, switchMap, tap, withLatestFrom } from 'rxjs/operators';
-import { constant, constVoid, flow, pipe } from 'fp-ts/lib/function';
-import { createAdapter, createPropertyAdapter } from '../../utils/rx.utils';
+import { combineLatest, merge, Observable } from 'rxjs';
+import { exhaustMap, filter, map, mapTo, pluck, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { constant, constVoid, flow, Lazy, pipe } from 'fp-ts/lib/function';
+import { createAdapter, createPropertyAdapter, hold } from '../../utils/rx.utils';
 import {
 	Case,
 	ConditionID,
@@ -18,7 +18,8 @@ import { SelectOption } from '../../models/select.model';
 interface ReviewViewModel {
 	availableCases$: Observable<Case[]>;
 	availableConditions$: Observable<SelectOption<ConditionID>[]>;
-	onCaseProcess: Effect<ConditionReviewComplete>;
+	onProcessCase: Effect<ConditionReviewComplete>;
+	onRefreshCases: Lazy<void>;
 	isProcessing$: Observable<boolean>;
 	isDataLoading$: Observable<boolean>;
 	isCasesListEmpty$: Observable<boolean>;
@@ -28,20 +29,23 @@ interface ReviewViewModel {
 }
 
 export const createReviewViewModel = (): ReviewViewModel => {
-	const { getCases, getConditions, processCase } = casesController;
-	const [onCaseProcess, processCaseAction$] = createAdapter<ConditionReviewComplete>();
+	const { getCases, getConditions, processCase, refreshCases } = casesController;
+	const [onProcessCase, processCaseAction$] = createAdapter<ConditionReviewComplete>();
 	const [onCurrentCaseChange, currentCase$] = createPropertyAdapter<option.Option<Case>>(option.none);
 	const [handleProcessingState, isProcessing$] = createAdapter<boolean>();
+	const [onRefreshCases, refreshCasesAction$] = createAdapter<void>();
 
 	const handleLoading = (isLoading: boolean) => () => handleProcessingState(isLoading);
 
-	const availableCasesRequest$ = getCases().pipe(shareReplay());
-	const availableConditionsRequest$ = getConditions().pipe(shareReplay());
+	const availableCasesRequest$ = getCases().pipe(hold());
+	const availableConditionsRequest$ = getConditions().pipe(hold());
+	const refreshedCases$ = refreshCasesAction$.pipe(switchMap(refreshCases), exhaustMap(getCases), hold());
 
-	const availableCases$ = availableCasesRequest$.pipe(
+	const availableCases$ = merge(availableCasesRequest$, refreshedCases$).pipe(
 		tap(unautorizedRedirect),
 		filter(isRequestSuccessful),
-		map((remoteData) => mapJSONCasesToCases(remoteData.data)),
+		pluck('data'),
+		map(mapJSONCasesToCases),
 		tap(flow(array.head, onCurrentCaseChange)),
 	);
 
@@ -97,7 +101,8 @@ export const createReviewViewModel = (): ReviewViewModel => {
 		availableConditions$,
 		isCasesListEmpty$,
 		isDataLoading$,
-		onCaseProcess,
+		onRefreshCases,
+		onProcessCase,
 		currentCase$,
 		isProcessing$,
 		processCaseError$,
